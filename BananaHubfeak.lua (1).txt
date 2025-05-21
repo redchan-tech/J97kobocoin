@@ -2723,7 +2723,7 @@ Main:AddButton({
     Title = "Copy discord invite link",
     Callback = function()
         pcall(function()
-            setclipboard("https://discord.gg/2YCGftRB")
+            setclipboard("https://discord.gg/yY9z43PQ37")
         end)
     end
 })
