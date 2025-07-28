@@ -1,0 +1,302 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+-- Hoặc sử dụng bản backup của bạn:
+-- local OrionLib = loadstring(game:HttpGet(('https://hypernite.xyz/Backup/Orion/source.lua')))() 
+
+local Lighting = game:GetService("Lighting")
+
+local Window = OrionLib:MakeWindow({Name = "TAP DOAN SAYGEX69", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionLightingConfig"})
+local LightingTab = Window:MakeTab({
+	Name = "Chế Độ Ánh Sáng",
+	Icon = "rbxassetid://4483345998", -- Có thể thay đổi icon
+	PremiumOnly = false
+})
+
+-- Hàm để reset các hiệu ứng Post-Processing
+local function ResetPostProcessingEffects()
+    for _, effect in ipairs(Lighting:GetChildren()) do
+        if effect:IsA("BloomEffect") or effect:IsA("ColorCorrectionEffect") or effect:IsA("DepthOfFieldEffect") or effect:IsA("SunRaysEffect") then
+            effect:Destroy()
+        end
+    end
+end
+
+-- Định nghĩa các cài đặt ánh sáng cho từng chế độ
+local lightingPresets = {
+    -- 1. Ban ngày (Daytime)
+    ["Ban ngày"] = function()
+        ResetPostProcessingEffects()
+        Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+        Lighting.Brightness = 2
+        Lighting.GlobalShadows = true
+        Lighting.TimeOfDay = "14:00:00"
+        Lighting.ExposureCompensation = 0
+        Lighting.GeographicLatitude = 0
+        Lighting.FogEnd = 100000
+        Lighting.FogStart = 0
+        Lighting.FogColor = Color3.fromRGB(192, 192, 192)
+        Lighting.Ambient = Color3.fromRGB(120, 120, 120)
+        Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+        -- Lighting.SkyBox = "rbxassetid://YOUR_DAY_SKYBOX_ID" -- Nhớ thay thế ID
+        OrionLib:MakeNotification({
+            Name = "Ánh Sáng Thay Đổi",
+            Content = "Đã chuyển sang chế độ Ban ngày.",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end,
+
+    -- 2. Hoàng hôn (Sunset)
+    ["Hoàng hôn"] = function()
+        ResetPostProcessingEffects()
+        Lighting.OutdoorAmbient = Color3.fromRGB(255, 150, 50)
+        Lighting.Brightness = 1.5
+        Lighting.GlobalShadows = true
+        Lighting.TimeOfDay = "18:30:00"
+        Lighting.ExposureCompensation = 0.2
+        Lighting.GeographicLatitude = 20
+        Lighting.FogEnd = 50000
+        Lighting.FogStart = 10000
+        Lighting.FogColor = Color3.fromRGB(255, 120, 0)
+        Lighting.Ambient = Color3.fromRGB(150, 100, 50)
+        Lighting.ColorShift_Top = Color3.fromRGB(20, 5, 0)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(5, 0, 0)
+        -- Lighting.SkyBox = "rbxassetid://YOUR_SUNSET_SKYBOX_ID"
+        
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 0.3
+        bloom.Threshold = 0.9
+        bloom.Size = 24
+        bloom.Parent = Lighting
+
+        local colorCorrection = Instance.new("ColorCorrectionEffect")
+        colorCorrection.Saturation = 0.1
+        colorCorrection.TintColor = Color3.fromRGB(255, 200, 180)
+        colorCorrection.Parent = Lighting
+        OrionLib:MakeNotification({
+            Name = "Ánh Sáng Thay Đổi",
+            Content = "Đã chuyển sang chế độ Hoàng hôn.",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end,
+
+    -- 3. Bình minh (Sunrise)
+    ["Bình minh"] = function()
+        ResetPostProcessingEffects()
+        Lighting.OutdoorAmbient = Color3.fromRGB(255, 180, 100)
+        Lighting.Brightness = 1.5
+        Lighting.GlobalShadows = true
+        Lighting.TimeOfDay = "06:00:00"
+        Lighting.ExposureCompensation = 0.1
+        Lighting.GeographicLatitude = -20
+        Lighting.FogEnd = 60000
+        Lighting.FogStart = 10000
+        Lighting.FogColor = Color3.fromRGB(255, 150, 50)
+        Lighting.Ambient = Color3.fromRGB(120, 80, 50)
+        Lighting.ColorShift_Top = Color3.fromRGB(10, 5, 0)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(5, 0, 0)
+        -- Lighting.SkyBox = "rbxassetid://YOUR_SUNRISE_SKYBOX_ID"
+
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 0.25
+        bloom.Threshold = 0.9
+        bloom.Size = 20
+        bloom.Parent = Lighting
+
+        local colorCorrection = Instance.new("ColorCorrectionEffect")
+        colorCorrection.Saturation = 0.05
+        colorCorrection.TintColor = Color3.fromRGB(255, 220, 200)
+        colorCorrection.Parent = Lighting
+        OrionLib:MakeNotification({
+            Name = "Ánh Sáng Thay Đổi",
+            Content = "Đã chuyển sang chế độ Bình minh.",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end,
+
+    -- 4. Buổi tối đầy sao (Starry Night)
+    ["Buổi tối đầy sao"] = function()
+        ResetPostProcessingEffects()
+        Lighting.OutdoorAmbient = Color3.fromRGB(20, 20, 40)
+        Lighting.Brightness = 0.2
+        Lighting.GlobalShadows = true
+        Lighting.TimeOfDay = "02:00:00"
+        Lighting.ExposureCompensation = -1
+        Lighting.GeographicLatitude = 0
+        Lighting.FogEnd = 100000
+        Lighting.FogStart = 0
+        Lighting.FogColor = Color3.fromRGB(0, 0, 10)
+        Lighting.Ambient = Color3.fromRGB(10, 10, 20)
+        Lighting.ColorShift_Top = Color3.fromRGB(-10, -10, 20)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(-5, -5, 10)
+        -- Lighting.SkyBox = "rbxassetid://YOUR_STARRY_NIGHT_SKYBOX_ID"
+
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 0.1
+        bloom.Threshold = 0.95
+        bloom.Size = 10
+        bloom.Parent = Lighting
+        OrionLib:MakeNotification({
+            Name = "Ánh Sáng Thay Đổi",
+            Content = "Đã chuyển sang chế độ Buổi tối đầy sao.",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end,
+
+    -- 5. Chiều tối mặt trời gần lặn (Late Afternoon/Approaching Sunset)
+    ["Chiều tối mặt trời gần lặn"] = function()
+        ResetPostProcessingEffects()
+        Lighting.OutdoorAmbient = Color3.fromRGB(200, 180, 120)
+        Lighting.Brightness = 1.8
+        Lighting.GlobalShadows = true
+        Lighting.TimeOfDay = "17:00:00"
+        Lighting.ExposureCompensation = 0.1
+        Lighting.GeographicLatitude = 10
+        Lighting.FogEnd = 80000
+        Lighting.FogStart = 0
+        Lighting.FogColor = Color3.fromRGB(220, 200, 180)
+        Lighting.Ambient = Color3.fromRGB(100, 90, 80)
+        Lighting.ColorShift_Top = Color3.fromRGB(10, 5, 0)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(5, 0, 0)
+        -- Lighting.SkyBox = "rbxassetid://YOUR_LATE_AFTERNOON_SKYBOX_ID"
+
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 0.15
+        bloom.Threshold = 0.8
+        bloom.Size = 15
+        bloom.Parent = Lighting
+        OrionLib:MakeNotification({
+            Name = "Ánh Sáng Thay Đổi",
+            Content = "Đã chuyển sang chế độ Chiều tối mặt trời gần lặn.",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end,
+}
+
+-- Thêm các nút bấm cho từng chế độ ánh sáng
+for name, func in pairs(lightingPresets) do
+    LightingTab:AddButton({
+        Name = "Chuyển sang: " .. name,
+        Callback = func
+    })
+end
+
+-- Tùy chọn: Thêm một Dropdown để chọn chế độ ánh sáng thay vì nhiều nút
+local lightingOptions = {}
+for name, _ in pairs(lightingPresets) do
+    table.insert(lightingOptions, name)
+end
+
+LightingTab:AddDropdown({
+    Name = "Chọn Chế Độ Ánh Sáng",
+    Default = "Ban ngày", -- Chế độ mặc định khi khởi chạy
+    Options = lightingOptions,
+    Callback = function(Value)
+        if lightingPresets[Value] then
+            lightingPresets[Value]() -- Gọi hàm tương ứng với chế độ đã chọn
+        end
+    end
+})
+
+-- Các thành phần UI khác từ code của bạn (có thể thêm vào Tab khác nếu muốn)
+local Tab = Window:MakeTab({
+	Name = "Tab Khác",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+OrionLib:MakeNotification({
+	Name = "Title!",
+	Content = "Notification content... what will it say??",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+Tab:AddToggle({
+	Name = "This is a toggle!",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+Tab:AddColorpicker({
+	Name = "Colorpicker",
+	Default = Color3.fromRGB(255, 0, 0),
+	Callback = function(Value)
+		print(Value)
+	end	  
+})
+
+local Slider = Tab:AddSlider({ -- Gán kết quả cho biến cục bộ
+	Name = "Slider",
+	Min = 0,
+	Max = 20,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "bananas",
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+Slider:Set(2)
+
+local CoolLabel = Tab:AddLabel("Label") -- Gán kết quả cho biến cục bộ
+CoolLabel:Set("Label New!")
+
+local CoolParagraph = Tab:AddParagraph("Paragraph","Paragraph Content") -- Gán kết quả cho biến cục bộ
+CoolParagraph:Set("Paragraph New!")
+
+Tab:AddTextbox({
+	Name = "Textbox",
+	Default = "default box input",
+	TextDisappear = true,
+	Callback = function(Value)
+		print(Value)
+	end	  
+})
+
+local Bind = Tab:AddBind({ -- Gán kết quả cho biến cục bộ
+	Name = "Bind",
+	Default = Enum.KeyCode.E,
+	Hold = false,
+	Callback = function()
+		print("press")
+	end    
+})
+Bind:Set(Enum.KeyCode.E)
+
+Tab:AddDropdown({
+	Name = "Dropdown",
+	Default = "1",
+	Options = {"1", "2"},
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+-- Hook HttpGet (giữ nguyên nếu bạn muốn)
+local httpHook;
+httpHook = hookfunction(game.HttpGet, function(self,...)
+   local Args = {...}
+   if Args[1] and type(Args[1]) == "string" then
+       if Args[1]:match("checkPremium.php") then
+           return "true"
+       end
+   end
+   return httpHook(self,...)
+end)
+
